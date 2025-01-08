@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap5
 import csv
 import smtplib
 import os
+import datetime
 
 EMAIL = os.getenv('email')
 PASSWORD = os.getenv('password')
@@ -15,6 +16,10 @@ RECEIVER = os.getenv('rec')
 app = Flask(__name__)
 Bootstrap5(app)
 app.config['SECRET_KEY']=os.getenv('key')
+
+@app.context_processor
+def inject_year():
+    return {'current_year':datetime.datetime.now().year}
 
 class AddCafe(FlaskForm):
     choice_food = [('🤌'), ('🤌🤌'), ('🤌🤌🤌'), ('🤌🤌🤌🤌'), ('🤌🤌🤌🤌🤌')]
@@ -77,6 +82,7 @@ def add():
         row = ','.join(data)
         with open('cafe-data.csv', mode='a', encoding='UTF-8') as csv_file:
             csv_file.write(row + '\n')
+            csv_file.flush()
             message = "Cafe added successfully !"
             return render_template('index.html',messages=message)
     return render_template('addcafe.html',form=form)
