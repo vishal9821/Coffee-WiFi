@@ -15,7 +15,7 @@ RECEIVER = os.getenv('rec')
 
 app = Flask(__name__)
 Bootstrap5(app)
-app.config['SECRET_KEY']=os.getenv('key','thisisnotansecret')
+app.config['SECRET_KEY']=os.getenv('key')
 
 @app.context_processor
 def inject_year():
